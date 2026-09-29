@@ -1,0 +1,189 @@
+name: EFATA 777 Frontend R1.1 Connected Qualification
+
+on:
+  workflow_dispatch:
+    inputs:
+      approval:
+        description: 'Type APPROVE_EFATA_777_FRONTEND_R1_1_CONNECTED_GATE'
+        required: true
+        type: string
+
+jobs:
+  connected-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Human approval gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ inputs.approval }}" = "APPROVE_EFATA_777_FRONTEND_R1_1_CONNECTED_GATE"
+          echo "human_approval=CONFIRMED"
+          echo "deploy_authorized=false"
+          echo "backend_change_authorized=false"
+
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Record provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          {
+            echo "git_sha=$(git rev-parse HEAD)"
+            echo "git_branch=${GITHUB_REF_NAME}"
+            echo "repository=${GITHUB_REPOSITORY}"
+            echo "workflow_run_id=${GITHUB_RUN_ID}"
+          } | tee evidence/00_provenance.log
+
+      - name: Setup Node 22.16.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.16.0"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Record Node npm registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "node=$(node --version)"
+            echo "npm=$(npm --version)"
+            echo "registry=$(npm config get registry)"
+          } | tee evidence/01_environment.log
+
+      - name: Verify R1.1 source integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c SHA256SUMS.txt | tee evidence/02_sha256sums.log
+
+      - name: Static check before lockfile
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          npm run static-check 2>&1 | tee evidence/03_static_check_pre.log
+
+      - name: Tests before lockfile
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          npm test 2>&1 | tee evidence/04_tests_pre.log
+
+      - name: Freeze package-lock
+        shell: bash
+        env:
+          NPM_CONFIG_AUDIT: "false"
+          NPM_CONFIG_FUND: "false"
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          test ! -f package-lock.json
+          ./scripts/freeze-lockfile.sh 2>&1 | tee evidence/05_freeze_lockfile.log
+          test -f package-lock.json
+          {
+            echo "package_lock_sha256=$(sha256sum package-lock.json | awk '{print $1}')"
+            echo "package_lock_bytes=$(wc -c < package-lock.json)"
+          } | tee evidence/06_lockfile_identity.log
+
+      - name: npm ci
+        shell: bash
+        env:
+          NPM_CONFIG_AUDIT: "false"
+          NPM_CONFIG_FUND: "false"
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          npm ci 2>&1 | tee evidence/07_npm_ci.log
+
+      - name: Static check after npm ci
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          npm run static-check 2>&1 | tee evidence/08_static_check_post.log
+
+      - name: Tests after npm ci
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          npm test 2>&1 | tee evidence/09_tests_post.log
+
+      - name: Vite production build
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          npm run build 2>&1 | tee evidence/10_vite_build.log
+
+      - name: Build artifact inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d dist
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum | tee evidence/11_dist_sha256sums.log
+          {
+            echo "dist_file_count=$(find dist -type f | wc -l)"
+            echo "dist_total_bytes=$(du -sb dist | awk '{print $1}')"
+          } | tee evidence/12_dist_inventory.log
+
+      - name: Canonical qualification script
+        shell: bash
+        env:
+          NPM_CONFIG_AUDIT: "false"
+          NPM_CONFIG_FUND: "false"
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          ./scripts/qualify-r1.1.sh 2>&1 | tee evidence/13_canonical_qualify.log
+
+      - name: Write success summary
+        if: success()
+        shell: bash
+        run: |
+          cat > evidence/GATE_RESULT.txt <<EOF
+          source_integrity=PASS
+          package_lock=CREATED
+          npm_ci=PASS
+          static_check=PASS
+          tests=PASS
+          vite_build=PASS
+          canonical_qualify=PASS
+          integrated_backend_runtime=NOT_EXECUTED
+          backend_modified=false
+          migration_modified=false
+          deploy_executed=false
+          production_authorized=false
+          EOF
+
+      - name: Write failure summary
+        if: failure()
+        shell: bash
+        run: |
+          mkdir -p evidence
+          cat > evidence/GATE_RESULT.txt <<EOF
+          connected_qualification=FAIL
+          inspect_first_failing_step=true
+          source_patch_authorized=false
+          backend_modified=false
+          migration_modified=false
+          deploy_executed=false
+          production_authorized=false
+          EOF
+
+      - name: Upload connected-gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: efata-777-r1-1-connected-gate-evidence
+          path: |
+            evidence/
+            package-lock.json
+            dist/
+          if-no-files-found: warn
+          retention-days: 14
