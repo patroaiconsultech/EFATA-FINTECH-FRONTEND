@@ -1,0 +1,73 @@
+# API CONTRACT MAP — R1.1
+
+Backend baseline SHA-256: `3f577e7a138fbbff7095d17a0fd9f3f55c461948b37a5334202442deb2cf152b`
+
+| METHOD | PATH | REQUEST TYPE | RESPONSE TYPE | SCREEN | IMPLEMENTATION | RUNTIME |
+|---|---|---|---|---|---|---|
+| `POST` | `/api/v1/consent/grants` | `ConsentGrantCreate` | `ConsentGrantRead` | `/app/consent` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/consent/grants/{consent_id}/revoke` | `ConsentGrantRevoke` | `ConsentGrantRead` | `/app/consent` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/consent/grants/{consent_id}/access` | `ConsentAccessRequest` | `ConsentGrantRead` | `/app/consent` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/consent/integrity/{tenant_id}` | `-` | `ConsentLedgerIntegrityRead` | `/app/consent` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/me` | `-` | `-` | `auth/bootstrap` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/opportunities/{opportunity_id}/documents` | `DocumentCreate` | `DocumentRead` | `/app/opportunities` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/health/live` | `-` | `-` | `/app/system` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/health/ready` | `-` | `-` | `/app/system` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/leads` | `LeadCreate` | `LeadRead` | `/app/leads` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/leads` | `-` | `list[LeadRead]` | `/app/leads` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/leads/{lead_id}` | `-` | `LeadRead` | `/app/leads` | `NOT_IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/agents` | `-` | `list[AgentRead]` | `/app/marketplace/agents` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/borrower-profiles` | `BorrowerProfileCreate` | `BorrowerProfileRead` | `/app/marketplace/borrowers` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/borrower-profiles` | `-` | `list[BorrowerProfileRead]` | `/app/marketplace/borrowers` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/funding-providers` | `FundingProviderCreate` | `FundingProviderRead` | `/app/marketplace/funders` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/funding-providers` | `-` | `list[FundingProviderRead]` | `/app/marketplace/funders` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/funding-products` | `FundingProductCreate` | `FundingProductRead` | `/app/marketplace/products` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/funding-products` | `-` | `list[FundingProductRead]` | `/app/marketplace/products` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/partners` | `PartnerProfileCreate` | `PartnerProfileRead` | `/app/marketplace/partners` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/partners` | `-` | `list[PartnerProfileRead]` | `/app/marketplace/partners` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/credit-requests` | `CreditRequestCreate` | `CreditRequestRead` | `/app/marketplace/credit-requests` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/credit-requests` | `-` | `list[CreditRequestRead]` | `/app/marketplace/credit-requests` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/credit-requests/{credit_request_id}/documents` | `CreditRequestDocumentCreate` | `CreditRequestDocumentRead` | `/app/marketplace/credit-requests` | `NOT_IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/credit-requests/{credit_request_id}/documents` | `-` | `list[CreditRequestDocumentRead]` | `/app/marketplace/credit-requests` | `NOT_IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/credit-requests/{credit_request_id}/matching` | `-` | `list[MatchRead]` | `/app/marketplace/credit-requests` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/marketplace/matches` | `-` | `list[MatchRead]` | `/app/marketplace/matches` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/matches/{match_id}/status` | `MatchStatusUpdate` | `MatchRead` | `/app/marketplace/matches` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/marketplace/commission-events` | `CommissionEventCreate` | `CommissionEventRead` | `/app/reconciliation/commissions` | `NOT_IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/opportunities` | `OpportunityCreate` | `OpportunityRead` | `/app/opportunities` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/opportunities` | `-` | `list[OpportunityRead]` | `/app/opportunities` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/opportunities/{opportunity_id}` | `-` | `OpportunityRead` | `/app/opportunities` | `NOT_IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/opportunities/{opportunity_id}/qualification` | `QualificationCreate` | `QualificationRead` | `/app/opportunities` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/commissions` | `CommissionEstimateRequest` | `CommissionLedgerRead` | `/app/reconciliation/*` | `DEGRADED_BY_DESIGN` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/commissions/{commission_id}/transition` | `CommissionTransitionRequest` | `CommissionLedgerRead` | `/app/reconciliation/*` | `DEGRADED_BY_DESIGN` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/reconciliation/commissions/{commission_id}` | `-` | `CommissionLedgerRead` | `/app/reconciliation/*` | `DEGRADED_BY_DESIGN` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/settlements` | `SettlementEventRequest` | `ReconciliationResultRead` | `/app/reconciliation/*` | `DEGRADED_BY_DESIGN` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/settlements/batch` | `list[SettlementEventRequest]` | `ReconciliationBatchRead` | `/app/reconciliation/*` | `DEGRADED_BY_DESIGN` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/reconciliation/review-queue` | `-` | `list[ReconciliationResultRead]` | `/app/reconciliation/*` | `DEGRADED_BY_DESIGN` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/persistent/commissions` | `CommissionEstimateRequest` | `CommissionLedgerRead` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/persistent/commissions/{commission_id}/transition` | `CommissionTransitionRequest` | `CommissionLedgerRead` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/persistent/settlements` | `SettlementEventRequest` | `ReconciliationResultRead` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/reconciliation/persistent/reviews` | `-` | `list[ReconciliationReviewRead]` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/persistent/reviews/claim` | `ReviewClaimRequest` | `list[ReconciliationReviewRead]` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/persistent/reviews/{review_id}/resolve` | `ReviewResolveRequest` | `ReconciliationReviewRead` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/persistent/outbox/claim` | `-` | `list[ReconciliationOutboxRead]` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/reconciliation/persistent/outbox/metrics` | `-` | `OutboxMetricsRead` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/reconciliation/persistent/outbox/{outbox_id}/ack` | `-` | `ReconciliationOutboxRead` | `/app/reconciliation/*` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/representations` | `RepresentationCreate` | `RepresentationRead` | `/app/opportunities` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/representations/{authorization_id}/accept` | `-` | `RepresentationRead` | `/app/opportunities` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/representations/{authorization_id}/revoke` | `-` | `RepresentationRead` | `/app/opportunities` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/risk/simulate` | `RiskSimulationInput` | `RiskAssessmentRead` | `/app/risk/simulator` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/risk/credit-requests/{credit_request_id}/assessments` | `RiskSimulationInput` | `RiskAssessmentRead` | `/app/risk/governance` | `NOT_IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/risk/credit-requests/{credit_request_id}/assessments` | `-` | `list[RiskAssessmentRead]` | `/app/risk/governance` | `NOT_IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/risk/governance-queue` | `-` | `list[GovernanceQueueItemRead]` | `/app/risk/governance` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/risk/matches/{match_id}/governance-reviews` | `GovernanceReviewCreate` | `GovernanceReviewRead` | `/app/risk/governance` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/studies` | `ViabilityStudyCreate` | `ViabilityStudyRead` | `/app/viability/studies` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/viability/studies` | `-` | `list[ViabilityStudyRead]` | `/app/viability/studies` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/studies/{study_id}/scenarios` | `ViabilityScenarioCreate` | `ViabilityScenarioRead` | `/app/viability/studies` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/viability/studies/{study_id}/scenarios` | `-` | `list[ViabilityScenarioRead]` | `/app/viability/studies` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/studies/{study_id}/scenarios/{scenario_key}/calculate` | `-` | `ViabilityCalculationRead` | `/app/viability/studies` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/studies/{study_id}/scenarios/{scenario_key}/sensitivity` | `SensitivityRequest` | `SensitivityRead` | `/app/viability/studies` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/studies/{study_id}/scenarios/{scenario_key}/snapshot` | `-` | `ViabilitySnapshotRead` | `/app/viability/studies` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/erp-connections` | `ERPConnectionCreate` | `ERPConnectionRead` | `/app/viability/erp` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/erp-connections/{connection_id}/sync/run` | `-` | `SyncJobRead` | `/app/viability/erp` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/erp-sync-jobs/{sync_job_id}/apply` | `ERPApplySyncRequest` | `ViabilityStudyRead` | `/app/viability/erp` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `GET` | `/api/v1/viability/erp-connections` | `-` | `list[ERPConnectionRead]` | `/app/viability/erp` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
+| `POST` | `/api/v1/viability/erp-connections/{connection_id}/sync` | `-` | `SyncJobRead` | `/app/viability/erp` | `IMPLEMENTED` | `NOT_RUNTIME_PROVEN` |
