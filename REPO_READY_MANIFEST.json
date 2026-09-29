@@ -1,0 +1,16 @@
+{
+  "package": "EFATA_777_FRONTEND_R1_1_REPO_READY",
+  "base_r1_1_zip_sha256": "390d9fd6e3e0217ae1b271023e4747d827fd71268bc2f5075490ce9ca234a9d9",
+  "ci_pack_zip_sha256": "aca5f6a52ce08ddcda78f49dd1d13cb9d0eb7bee3dee612b221e5df9dc64fbe6",
+  "functional_source_changed": false,
+  "added_repository_files": [
+    ".github/workflows/efata-777-r1-1-connected-gate.yml",
+    ".gitignore",
+    "README_REPOSITORY_BOOTSTRAP.md"
+  ],
+  "backend_modified": false,
+  "migration_modified": false,
+  "deploy_executed": false,
+  "lockfile_status": "PENDING_CONNECTED_GATE",
+  "railway_connection_recommended_after": "CONNECTED_GATE_PASS_AND_LOCKFILE_FREEZE"
+}

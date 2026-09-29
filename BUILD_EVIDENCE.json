@@ -1,0 +1,30 @@
+{
+  "artifact": "EFATA_777_FRONTEND_REBUILD_R1",
+  "generated_at": "2026-09-28",
+  "validation": {
+    "node_js_syntax": "PASS",
+    "jsx_parse": "PASS",
+    "static_check": "PASS",
+    "unit_tests": "PASS_6_OF_6",
+    "npm_build": "NOT_EXECUTED_DEPENDENCIES_NOT_AVAILABLE_OFFLINE",
+    "integrated_backend_runtime": "NOT_PROVEN"
+  },
+  "commands": {
+    "static_check": "npm run static-check",
+    "unit_tests": "npm test",
+    "jsx_parse": "tsc --allowJs --checkJs false --jsx preserve --noEmit --noResolve --skipLibCheck true <jsx files>"
+  },
+  "governance": {
+    "backend_code_modified": false,
+    "backend_migration_modified": false,
+    "commit_executed": false,
+    "merge_executed": false,
+    "deploy_executed": false,
+    "production_authorized": false
+  },
+  "known_blockers": [
+    "MIG-0009-DOWNGRADE-001 remains open in backend baseline",
+    "frontend npm build must be executed in an environment with registry/dependencies",
+    "integrated frontend-backend runtime smoke is pending"
+  ]
+}

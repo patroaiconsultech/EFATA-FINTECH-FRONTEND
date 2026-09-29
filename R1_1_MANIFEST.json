@@ -1,0 +1,51 @@
+{
+  "package": "EFATA_777_FRONTEND_REBUILD_R1_1_PROPOSAL_ONLY",
+  "baseline_r1_sha256": "61f93bb283c8cea0767cb4458cd26c5cc2360e4091999951226c56cee4fbc152",
+  "backend_baseline_sha256": "3f577e7a138fbbff7095d17a0fd9f3f55c461948b37a5334202442deb2cf152b",
+  "changed_files": [
+    "README.md",
+    "docs/FRONTEND_CONTRACT_MATRIX.md",
+    "package.json",
+    "scripts/static-check.mjs",
+    "src/App.jsx",
+    "src/config.js",
+    "src/lib/api.js",
+    "src/lib/auth.js",
+    "src/pages/Opportunities.jsx"
+  ],
+  "new_files": [
+    "R1_1_QUALIFICATION_EVIDENCE.json",
+    "docs/API_CONTRACT_MAP.md",
+    "docs/FRONTEND_ARCHITECTURE.md",
+    "docs/LOCKFILE_GATE.md",
+    "docs/NON_FRONTEND_DELTA_REPORT.md",
+    "docs/ROLE_PERMISSION_MATRIX.md",
+    "scripts/freeze-lockfile.sh",
+    "scripts/qualify-r1.1.sh",
+    "tests/api.test.mjs",
+    "tests/auth.test.mjs",
+    "tests/permissions.test.mjs",
+    "tests/source-contract.test.mjs"
+  ],
+  "removed_files": [],
+  "local_validation": {
+    "node_js_syntax": "PASS",
+    "jsx_parse": "PASS",
+    "static_check": "PASS",
+    "tests": "PASS"
+  },
+  "blocking_gates": {
+    "package_lock": "PENDING",
+    "npm_ci": "PENDING",
+    "vite_build": "PENDING",
+    "integrated_runtime": "PENDING",
+    "mig_0009_backend": "OPEN"
+  },
+  "execution": {
+    "write_remote": false,
+    "commit": false,
+    "merge": false,
+    "deploy": false,
+    "backend_change": false
+  }
+}
